@@ -19,14 +19,14 @@ public class UserController {
     UserService userService;
 
     @GetMapping(value = "/{id}")
-    public ResponseEntity<User> getUserById(@PathVariable Long id) {
-        Optional<User> user = userService.getUserById(id);
-        return user.isPresent() ? ResponseEntity.ok(user.get()) : ResponseEntity.noContent().build();
+    public ResponseEntity<User> findUserById(@PathVariable Long id) {
+        Optional<User> user = userService.findUserById(id);
+        return user.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.noContent().build());
     }
 
     @GetMapping(value = "")
-    public ResponseEntity<List<User>> getAllUser() {
-        List<User> users = userService.getAllUsers();
+    public ResponseEntity<List<User>> findAllUsers() {
+        List<User> users = userService.findAllUsers();
         return !users.isEmpty() ? ResponseEntity.ok(users) : ResponseEntity.noContent().build();
     }
 
@@ -46,13 +46,12 @@ public class UserController {
     }
 
     @PutMapping(value = "/{id}")
-    public ResponseEntity<User> deleteUser(@PathVariable Long id, @RequestBody Optional<User> user) {
+    public ResponseEntity<User> updateUser(@PathVariable Long id, @RequestBody Optional<User> user) {
         if (!userService.isExist(id)) return ResponseEntity.notFound().build();
         if (user.isPresent()) {
-            User u = userService.updateUserById(user.get(), id);
-            return ResponseEntity.ok(user.get());
+            User userToReturn = userService.updateUserById(user.get(), id);
+            return ResponseEntity.ok(userToReturn);
         }
         return ResponseEntity.noContent().build();
-
     }
 }

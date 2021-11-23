@@ -16,22 +16,17 @@ public class UserService {
 
     UserRepository userRepository;
 
-    public Optional<User> getUserById(Long id) {
+    public Optional<User> findUserById(Long id) {
         return userRepository.findById(id);
     }
 
-    public User addUser(User user) {
-        userRepository.save(user);
-        return user;
-    }
-
-    public List<User> getAllUsers() {
+    public List<User> findAllUsers() {
         return userRepository.findAll();
     }
 
-    public void deleteUserById(Long id) {
-        userRepository.deleteById(id);
-    }
+    public void deleteUserById(Long id) { userRepository.deleteById(id); }
+
+    public boolean isExist(Long id) { return  userRepository.existsById(id); }
 
     public User updateUserById(User user, Long id) {
         user.setId(id);
@@ -39,7 +34,9 @@ public class UserService {
         return user;
     }
 
-    public boolean isExist(Long id) {
-       return  userRepository.existsById(id);
+    public User addUser(User user) {
+        userRepository.save(user);
+        return user;
     }
+
 }
