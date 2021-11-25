@@ -9,6 +9,6 @@ import java.util.List;
 @Repository
 public interface SubjectRepository extends JpaRepository<Subject, Long> {
 
-    List<Subject> findSubjectsByClassId();
-    List<Subject> findSubjectsByTeacherId();
+    List<Subject> findSubjectsByClassId(Long classId);
+    List<Subject> findSubjectsByTeacherId(Long teacherId);
 }

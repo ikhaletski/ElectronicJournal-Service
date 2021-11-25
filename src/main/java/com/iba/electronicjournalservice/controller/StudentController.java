@@ -15,7 +15,7 @@ import java.util.Optional;
 @AllArgsConstructor
 public class StudentController {
 
-    StudentService studentService;
+    private StudentService studentService;
 
     @GetMapping(value = "")
     public ResponseEntity<List<User>> findAllStudents() {
@@ -29,7 +29,9 @@ public class StudentController {
         return student.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.noContent().build());
     }
 
-
-
-
+    @GetMapping(value = "/class/{classId}")
+    public ResponseEntity<List<User>> findStudentsByClassId(@PathVariable Long classId) {
+        List<User> students = studentService.findStudentsByClassId(classId);
+        return !students.isEmpty() ? ResponseEntity.ok(students) : ResponseEntity.noContent().build();
+    }
 }

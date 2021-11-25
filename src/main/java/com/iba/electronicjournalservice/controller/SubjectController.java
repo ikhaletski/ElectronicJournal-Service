@@ -2,8 +2,8 @@ package com.iba.electronicjournalservice.controller;
 
 import com.iba.electronicjournalservice.logic.service.SubjectService;
 import com.iba.electronicjournalservice.model.Subject;
-import com.iba.electronicjournalservice.model.User;
 import lombok.AllArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -15,7 +15,7 @@ import java.util.Optional;
 @AllArgsConstructor
 public class SubjectController {
 
-    SubjectService subjectService;
+    private SubjectService subjectService;
 
     @GetMapping(value = "/{id}")
     public ResponseEntity<Subject> findSubjectById(@PathVariable Long id) {
@@ -42,16 +42,17 @@ public class SubjectController {
     }
 
     @PostMapping(value = "")
-    public ResponseEntity<Subject> addUser(@RequestBody Optional<Subject> subject) {
+    public ResponseEntity<Subject> addSubject(@RequestBody Optional<Subject> subject) {
         if (subject.isPresent()) {
             Subject subjectToReturn = subjectService.addSubject(subject.get());
             return ResponseEntity.ok(subjectToReturn);
         }
-        return ResponseEntity.badRequest().build();
+        return ResponseEntity.noContent().build();
     }
 
     @DeleteMapping(value = "/{id}")
     public ResponseEntity<Subject> deleteSubject(@PathVariable Long id) {
+        if(!subjectService.isExist(id)) return ResponseEntity.notFound().build();
         subjectService.deleteSubjectById(id);
         return ResponseEntity.ok().build();
     }

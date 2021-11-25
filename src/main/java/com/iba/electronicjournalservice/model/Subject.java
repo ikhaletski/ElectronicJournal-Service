@@ -1,15 +1,11 @@
 package com.iba.electronicjournalservice.model;
 
-import jdk.jfr.Enabled;
 import lombok.Data;
 
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 
-@Enabled
-@Table(name = "subject")
+@Entity
+@Table(name = "subject", schema = "public")
 @Data
 public class Subject {
     @Id

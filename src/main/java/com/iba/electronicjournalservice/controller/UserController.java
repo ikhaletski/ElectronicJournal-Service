@@ -1,5 +1,6 @@
 package com.iba.electronicjournalservice.controller;
 
+import com.iba.electronicjournalservice.dto.UserDto;
 import com.iba.electronicjournalservice.logic.service.UserService;
 import com.iba.electronicjournalservice.model.User;
 import lombok.AllArgsConstructor;
@@ -16,7 +17,7 @@ import java.util.Optional;
 @AllArgsConstructor
 public class UserController {
 
-    UserService userService;
+    private UserService userService;
 
     @GetMapping(value = "/{id}")
     public ResponseEntity<User> findUserById(@PathVariable Long id) {
@@ -31,27 +32,41 @@ public class UserController {
     }
 
     @PostMapping(value = "")
-    public ResponseEntity<User> addUser(@RequestBody Optional<User> user) {
-        if (user.isPresent()) {
-            User u = userService.addUser(user.get());
-            return ResponseEntity.ok(u);
+    public ResponseEntity<User> addUser(@RequestBody Optional<UserDto> userDto) {
+        if (userDto.isPresent()) {
+            User userToReturn = userService.addUser(userDto.get().toUser());
+            return ResponseEntity.ok(userToReturn);
         }
-        return ResponseEntity.badRequest().build();
+        return ResponseEntity.noContent().build();
     }
 
     @DeleteMapping(value = "/{id}")
     public ResponseEntity<User> deleteUser(@PathVariable Long id) {
+        if(!userService.isExist(id)) return ResponseEntity.notFound().build();
         userService.deleteUserById(id);
         return ResponseEntity.ok().build();
     }
 
     @PutMapping(value = "/{id}")
-    public ResponseEntity<User> updateUser(@PathVariable Long id, @RequestBody Optional<User> user) {
+    public ResponseEntity<User> updateUser(@PathVariable Long id, @RequestBody Optional<UserDto> userDto) {
         if (!userService.isExist(id)) return ResponseEntity.notFound().build();
-        if (user.isPresent()) {
-            User userToReturn = userService.updateUserById(user.get(), id);
+        User user = userService.findUserById(id).get();
+        if (userDto.isPresent()) {
+            User tempUser = userDto.get().toUser();
+            tempUser.setRoleId(user.getRoleId());
+            User userToReturn = userService.updateUserById(tempUser, id);
             return ResponseEntity.ok(userToReturn);
         }
         return ResponseEntity.noContent().build();
+    }
+
+    @PutMapping(value = "/role/{id}")
+    public ResponseEntity<User> updateRole(@PathVariable Long id, @RequestBody Long roleId) {
+        if (roleId >= 0 && roleId <= 3) return ResponseEntity.badRequest().build();
+        Optional<User> user = userService.findUserById(id);
+        if(user.isEmpty()) return ResponseEntity.notFound().build();
+        user.get().setRoleId(roleId);
+        User userToReturn = userService.updateUserById(user.get(), id);
+        return ResponseEntity.ok(userToReturn);
     }
 }
