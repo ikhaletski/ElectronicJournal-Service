@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
+@CrossOrigin(origins="http://localhost:3000")
 @RequestMapping("/subject")
 @AllArgsConstructor
 public class SubjectController {
@@ -36,7 +37,7 @@ public class SubjectController {
     }
 
     @GetMapping(value = "")
-    public ResponseEntity<List<Subject>> findAllSubject() {
+    public ResponseEntity<List<Subject>> findAllSubjects() {
         List<Subject> subjects = subjectService.findAllSubjects();
         return !subjects.isEmpty() ? ResponseEntity.ok(subjects) : ResponseEntity.noContent().build();
     }

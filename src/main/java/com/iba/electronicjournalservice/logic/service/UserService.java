@@ -1,7 +1,7 @@
 package com.iba.electronicjournalservice.logic.service;
 
 
-import com.iba.electronicjournalservice.model.User;
+import com.iba.electronicjournalservice.model.user.User;
 import com.iba.electronicjournalservice.repository.UserRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;

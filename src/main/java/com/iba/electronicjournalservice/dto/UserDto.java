@@ -1,8 +1,7 @@
 package com.iba.electronicjournalservice.dto;
 
-import com.iba.electronicjournalservice.model.User;
+import com.iba.electronicjournalservice.model.user.User;
 import lombok.Data;
-import org.springframework.stereotype.Component;
 
 @Data
 public class UserDto {

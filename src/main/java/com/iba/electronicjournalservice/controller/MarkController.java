@@ -1,10 +1,8 @@
 package com.iba.electronicjournalservice.controller;
 
-import com.iba.electronicjournalservice.dto.UserDto;
 import com.iba.electronicjournalservice.logic.service.MarkService;
-import com.iba.electronicjournalservice.logic.service.UserService;
 import com.iba.electronicjournalservice.model.Mark;
-import com.iba.electronicjournalservice.model.User;
+import com.iba.electronicjournalservice.model.user.User;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -55,10 +53,10 @@ public class MarkController {
     }
 
     @PutMapping(value = "/{id}")
-    public ResponseEntity<Mark> updateUser(@PathVariable Long id, @RequestBody Optional<Mark> mark) {
+    public ResponseEntity<Mark> updateGroup(@PathVariable Long id, @RequestBody Optional<Mark> mark) {
         if (!markService.isExist(id)) return ResponseEntity.notFound().build();
         if (mark.isPresent()) {
-            mark.get().setId(id);
+            markService.updateMark(id, mark.get());
             return ResponseEntity.ok(mark.get());
         }
         return ResponseEntity.noContent().build();

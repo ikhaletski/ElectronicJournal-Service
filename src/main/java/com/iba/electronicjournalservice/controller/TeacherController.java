@@ -1,8 +1,7 @@
 package com.iba.electronicjournalservice.controller;
 
-import com.iba.electronicjournalservice.logic.service.StudentService;
 import com.iba.electronicjournalservice.logic.service.TeacherService;
-import com.iba.electronicjournalservice.model.User;
+import com.iba.electronicjournalservice.model.user.User;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;

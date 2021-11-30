@@ -1,4 +1,4 @@
-package com.iba.electronicjournalservice.model;
+package com.iba.electronicjournalservice.model.user;
 
 import lombok.Data;
 
@@ -16,6 +16,6 @@ public class User {
     private String lastName;
     private String email;
     private String phone;
-    private Long roleId  = 0L;
+    private String role = Roles.USER.name();
     private Long classId;
 }

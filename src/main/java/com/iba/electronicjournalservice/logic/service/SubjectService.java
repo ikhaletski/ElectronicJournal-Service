@@ -1,7 +1,6 @@
 package com.iba.electronicjournalservice.logic.service;
 
 import com.iba.electronicjournalservice.model.Subject;
-import com.iba.electronicjournalservice.model.User;
 import com.iba.electronicjournalservice.repository.SubjectRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -14,6 +13,7 @@ import java.util.Optional;
 public class SubjectService {
 
     private SubjectRepository subjectRepository;
+
 
     public Optional<Subject> findSubjectById(Long id) { return subjectRepository.findById(id); }
 
