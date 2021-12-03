@@ -18,4 +18,5 @@ public class User {
     private String phone;
     private String role = Roles.USER.name();
     private Long classId;
+    private String password;
 }

@@ -1,13 +1,26 @@
 package com.iba.electronicjournalservice.controller;
 
+import com.iba.electronicjournalservice.dto.AuthenticationRequestDto;
+import com.iba.electronicjournalservice.dto.RoleDto;
 import com.iba.electronicjournalservice.dto.UserDto;
+import com.iba.electronicjournalservice.dto.UserResponseDto;
+import com.iba.electronicjournalservice.logic.service.GroupService;
 import com.iba.electronicjournalservice.logic.service.UserService;
 import com.iba.electronicjournalservice.model.user.User;
+import com.iba.electronicjournalservice.security.jwt.JwtTokenProvider;
 import lombok.AllArgsConstructor;
+import org.springframework.boot.autoconfigure.neo4j.Neo4jProperties;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @RestController
@@ -17,11 +30,16 @@ import java.util.Optional;
 public class UserController {
 
     private UserService userService;
+    private GroupService groupService;
+    private AuthenticationManager authenticationManager;
+    private JwtTokenProvider jwtTokenProvider;
 
     @GetMapping(value = "/{id}")
-    public ResponseEntity<User> findUserById(@PathVariable Long id) {
+    public ResponseEntity<UserResponseDto> findUserById(@PathVariable Long id) {
         Optional<User> user = userService.findUserById(id);
-        return user.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.noContent().build());
+        UserResponseDto userResponseDto = new UserResponseDto(user.get());
+        userResponseDto.setClassName(groupService.findById(user.get().getClassId()).get().getGroupName());
+        return ResponseEntity.ok(userResponseDto);
     }
 
     @GetMapping(value = "")
@@ -60,12 +78,33 @@ public class UserController {
     }
 
     @PutMapping(value = "/role/{id}")
-    public ResponseEntity<User> updateRole(@PathVariable Long id, @RequestBody String role) {
-        //if (role >= 0 && role <= 3) return ResponseEntity.badRequest().build();
+    public ResponseEntity<User> updateRole(@PathVariable Long id, @RequestBody RoleDto role) {
+        if (!role.getRole().equals("USER") && !role.getRole().equals("ADMIN") && !role.getRole().equals("TEACHER") && !role.getRole().equals("STUDENT")) return ResponseEntity.badRequest().build();
         Optional<User> user = userService.findUserById(id);
         if(user.isEmpty()) return ResponseEntity.notFound().build();
-        user.get().setRole(role);
+        user.get().setRole(role.getRole());
         User userToReturn = userService.updateUserById(user.get(), id);
         return ResponseEntity.ok(userToReturn);
+    }
+
+    @PostMapping("/auth")
+    public ResponseEntity login(@RequestBody AuthenticationRequestDto requestDto) {
+        try {
+            String username = requestDto.getUsername();
+            authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, requestDto.getPassword()));
+            Optional<User> user = userService.findUserByEmail(username);
+
+            if (user.isEmpty()) throw new UsernameNotFoundException("User with username " + username + " not found");
+
+            String token = jwtTokenProvider.createToken(username, user.get().getRole());
+
+            Map<Object, Object> response = new HashMap<>();
+            response.put("username", username);
+            response.put("token", token);
+
+            return ResponseEntity.ok(response);
+        }catch (AuthenticationException e) {
+            throw new BadCredentialsException("Invalid login or password");
+        }
     }
 }

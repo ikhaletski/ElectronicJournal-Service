@@ -1,6 +1,7 @@
 package com.iba.electronicjournalservice.logic.service;
 
 import com.iba.electronicjournalservice.model.Subject;
+import com.iba.electronicjournalservice.repository.GroupRepository;
 import com.iba.electronicjournalservice.repository.SubjectRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -13,6 +14,8 @@ import java.util.Optional;
 public class SubjectService {
 
     private SubjectRepository subjectRepository;
+    private TeacherService teacherService;
+    private GroupService groupService;
 
 
     public Optional<Subject> findSubjectById(Long id) { return subjectRepository.findById(id); }
@@ -35,8 +38,11 @@ public class SubjectService {
         return subject;
     }
 
-    public Subject addSubject(Subject subject) {
-        subjectRepository.save(subject);
-        return subject;
+    public Optional<Subject> addSubject(Subject subject) {
+        if(teacherService.isExist(subject.getTeacherId()) && groupService.isExist(subject.getClassId())) {
+            subjectRepository.save(subject);
+            return Optional.of(subject);
+        }
+        return Optional.empty();
     }
 }

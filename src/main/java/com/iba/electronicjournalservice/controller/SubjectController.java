@@ -45,8 +45,8 @@ public class SubjectController {
     @PostMapping(value = "")
     public ResponseEntity<Subject> addSubject(@RequestBody Optional<Subject> subject) {
         if (subject.isPresent()) {
-            Subject subjectToReturn = subjectService.addSubject(subject.get());
-            return ResponseEntity.ok(subjectToReturn);
+            Optional<Subject> subjectToReturn = subjectService.addSubject(subject.get());
+            return subjectToReturn.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.badRequest().build());
         }
         return ResponseEntity.noContent().build();
     }

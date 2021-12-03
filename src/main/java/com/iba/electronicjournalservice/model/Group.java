@@ -11,6 +11,7 @@ public class Group {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String className;
+    @Column(name="class_name")
+    private String groupName;
     private Long teacherId;
 }

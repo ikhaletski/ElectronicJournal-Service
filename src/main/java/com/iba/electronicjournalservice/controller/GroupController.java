@@ -13,13 +13,14 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
+@CrossOrigin(origins="http://localhost:3000")
 @RequestMapping("/group")
 @AllArgsConstructor
 public class GroupController {
 
     GroupService groupService;
 
-    @GetMapping(value = "/")
+    @GetMapping(value = "")
     public ResponseEntity<List<Group>> findAll() {
         List<Group> groups = groupService.findAll();
         return !groups.isEmpty() ? ResponseEntity.ok(groups) : ResponseEntity.noContent().build();

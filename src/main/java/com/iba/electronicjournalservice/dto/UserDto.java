@@ -12,6 +12,7 @@ public class UserDto {
     private String email;
     private String phone;
     private Long classId;
+    private String password;
 
     public User toUser() {
         User user = new User();
@@ -21,6 +22,7 @@ public class UserDto {
         user.setEmail(this.email);
         user.setPhone(this.phone);
         user.setClassId(this.classId);
+        user.setPassword(this.password);
         return user;
     }
 }
