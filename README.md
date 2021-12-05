@@ -10,3 +10,5 @@ Roles:
 - Admin(Editing users list and their permissions)
 - Teacher(Adding marks and missing classes)
 - Student(View all information about themselves)
+
+Front-end: https://github.com/ikhaletski/electronicjournal
