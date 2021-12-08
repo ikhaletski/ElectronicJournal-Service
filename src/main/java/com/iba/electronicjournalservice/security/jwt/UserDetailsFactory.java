@@ -5,15 +5,14 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
 
-public final class JwtUserFactory {
-    public JwtUserFactory() {
+public final class UserDetailsFactory {
+    public UserDetailsFactory() {
     }
 
-    public static JwtUser create(User user) {
-        return new JwtUser(user.getId(),
+    public static UserDetailsImpl create(User user) {
+        return new UserDetailsImpl(user.getId(),
                 user.getFirstName(),
                 user.getLastName(),
                 user.getEmail(),

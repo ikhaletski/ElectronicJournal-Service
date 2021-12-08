@@ -1,5 +1,6 @@
 package com.iba.electronicjournalservice.security.jwt;
 
+import com.iba.electronicjournalservice.model.user.User;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,10 +46,11 @@ public class JwtTokenProvider {
     @PostConstruct
     protected void init() { secret = Base64.getEncoder().encodeToString(secret.getBytes()); }
 
-    public String createToken(String username, String role) {
+    public String createToken(User user) {
 
-        Claims claims = Jwts.claims().setSubject(username);
-        claims.put("role", role);
+        Claims claims = Jwts.claims().setSubject(user.getEmail());
+        claims.put("role", user.getRole());
+        claims.put("id", user.getId());
 
         Date now = new Date();
         Date validity = new Date(now.getTime() + validityInMilliseconds);
