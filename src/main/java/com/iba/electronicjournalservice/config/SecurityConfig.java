@@ -1,10 +1,12 @@
 package com.iba.electronicjournalservice.config;
 
+import com.iba.electronicjournalservice.model.user.Roles;
 import com.iba.electronicjournalservice.security.jwt.JwtConfigurer;
 import com.iba.electronicjournalservice.security.jwt.JwtTokenProvider;
 import lombok.AllArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
@@ -31,12 +33,13 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
                 .authorizeRequests()
-                .antMatchers("/**").permitAll()
-                .antMatchers().hasRole("ADMIN")
-//                .antMatchers().hasRole("TEACHER")
-//                .antMatchers().hasRole("STUDENT")
+                .antMatchers("/auth/**").permitAll()
+                .antMatchers("/user/**").hasAuthority(Roles.ADMIN.name())
+                .antMatchers("/teacher/**", "/student/**").hasAnyAuthority(Roles.TEACHER.name(), Roles.STUDENT.name())
+                .antMatchers(HttpMethod.GET, "/group", "/subject", "/mark").hasAnyAuthority(Roles.TEACHER.name(), Roles.STUDENT.name())
+                .antMatchers("/mark").hasAuthority(Roles.TEACHER.name())
                 .anyRequest().authenticated()
                 .and()
-                .apply(new JwtConfigurer((jwtTokenProvider)));
+                .apply(new JwtConfigurer(jwtTokenProvider));
     }
 }

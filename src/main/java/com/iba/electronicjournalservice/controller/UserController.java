@@ -11,6 +11,7 @@ import com.iba.electronicjournalservice.security.jwt.JwtTokenProvider;
 import lombok.AllArgsConstructor;
 import org.springframework.boot.autoconfigure.neo4j.Neo4jProperties;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -31,8 +32,6 @@ public class UserController {
 
     private UserService userService;
     private GroupService groupService;
-    private AuthenticationManager authenticationManager;
-    private JwtTokenProvider jwtTokenProvider;
 
     @GetMapping(value = "/{id}")
     public ResponseEntity<UserResponseDto> findUserById(@PathVariable Long id) {
@@ -87,24 +86,4 @@ public class UserController {
         return ResponseEntity.ok(userToReturn);
     }
 
-    @PostMapping("/auth")
-    public ResponseEntity login(@RequestBody AuthenticationRequestDto requestDto) {
-        try {
-            String username = requestDto.getUsername();
-            authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, requestDto.getPassword()));
-            Optional<User> user = userService.findUserByEmail(username);
-
-            if (user.isEmpty()) throw new UsernameNotFoundException("User with username " + username + " not found");
-
-            String token = jwtTokenProvider.createToken(username, user.get().getRole());
-
-            Map<Object, Object> response = new HashMap<>();
-            response.put("username", username);
-            response.put("token", token);
-
-            return ResponseEntity.ok(response);
-        }catch (AuthenticationException e) {
-            throw new BadCredentialsException("Invalid login or password");
-        }
-    }
 }

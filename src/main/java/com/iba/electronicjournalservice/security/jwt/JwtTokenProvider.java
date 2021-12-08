@@ -16,8 +16,10 @@ import io.jsonwebtoken.security.Keys;
 import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpServletRequest;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
 import java.util.Base64;
 import java.util.Date;
+import java.util.List;
 
 @Component
 public class JwtTokenProvider {
@@ -37,8 +39,7 @@ public class JwtTokenProvider {
 
     @Bean
     public BCryptPasswordEncoder passwordEncoder() {
-        BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
-        return  bCryptPasswordEncoder;
+        return new BCryptPasswordEncoder();
     }
 
     @PostConstruct
@@ -66,10 +67,10 @@ public class JwtTokenProvider {
     }
 
     public String getUsername(String token) {
-        return Jwts.parserBuilder().setSigningKey(secret).build().parseClaimsJwt(token).getBody().getSubject();
+        return Jwts.parserBuilder().setSigningKey(secret).build().parseClaimsJws(token).getBody().getSubject();
     }
 
-    public boolean validateToken(String token) throws JwtAuthenticationException {
+    public boolean validateToken(String token) throws JwtException {
         try {
             Jws<Claims> claims = Jwts.parserBuilder().setSigningKey(secret).build().parseClaimsJws(token);
 
@@ -80,7 +81,7 @@ public class JwtTokenProvider {
             return true;
         }
         catch(JwtException | IllegalArgumentException e) {
-            throw new JwtAuthenticationException("Jwt token is expired or invalid");
+            throw new JwtException("Jwt token is expired or invalid");
         }
     }
 

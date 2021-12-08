@@ -5,6 +5,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 public final class JwtUserFactory {
@@ -25,7 +26,7 @@ public final class JwtUserFactory {
     }
 
     public static List<GrantedAuthority> mapToGrantedAuthorities(String authority) {
-        List<GrantedAuthority> authorities= new ArrayList<GrantedAuthority>();
+        List<GrantedAuthority> authorities= new ArrayList<>();
         authorities.add(new SimpleGrantedAuthority(authority));
         return authorities;
     }
