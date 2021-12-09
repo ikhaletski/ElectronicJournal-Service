@@ -1,4 +1,4 @@
-package com.iba.electronicjournalservice.security.jwt;
+package com.iba.electronicjournalservice.security;
 
 import com.iba.electronicjournalservice.model.user.User;
 import org.springframework.security.core.GrantedAuthority;

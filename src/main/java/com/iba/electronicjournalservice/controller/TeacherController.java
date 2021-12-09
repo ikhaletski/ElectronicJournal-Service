@@ -1,5 +1,7 @@
 package com.iba.electronicjournalservice.controller;
 
+import com.iba.electronicjournalservice.dto.UserResponseDto.UserResponseDto;
+import com.iba.electronicjournalservice.dto.UserResponseDto.UserResponseDtoFactory;
 import com.iba.electronicjournalservice.logic.service.TeacherService;
 import com.iba.electronicjournalservice.model.user.User;
 import lombok.AllArgsConstructor;
@@ -9,6 +11,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -20,20 +23,24 @@ public class TeacherController {
     private TeacherService teacherService;
 
     @GetMapping(value = "")
-    public ResponseEntity<List<User>> findAllTeachers() {
-        List<User> students = teacherService.findAllTeachers();
-        return !students.isEmpty() ? ResponseEntity.ok(students) : ResponseEntity.noContent().build();
+    public ResponseEntity<List<UserResponseDto>> findAllTeachers() {
+        List<User> teachers = teacherService.findAllTeachers();
+        List<UserResponseDto> teachersDto = new ArrayList<>();
+        teachers.forEach(user -> {teachersDto.add(UserResponseDtoFactory.fromUserToUserResponseDto(user));});
+        return !teachersDto.isEmpty() ? ResponseEntity.ok(teachersDto) : ResponseEntity.noContent().build();
     }
 
     @GetMapping(value = "/{id}")
-    public ResponseEntity<User> findTeacherById(@PathVariable Long id) {
-        Optional<User> student = teacherService.findTeacherById(id);
-        return student.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.noContent().build());
+    public ResponseEntity<UserResponseDto> findTeacherById(@PathVariable Long id) {
+        Optional<User> teacher = teacherService.findTeacherById(id);
+        return teacher.map(user -> ResponseEntity.ok(UserResponseDtoFactory.fromUserToUserResponseDto(user))).orElseGet(() -> ResponseEntity.noContent().build());
     }
 
     @GetMapping(value = "/class/{classId}")
-    public ResponseEntity<List<User>> findTeacherByClassId(@PathVariable Long classId) {
-        List<User> students = teacherService.findTeachersByClassId(classId);
-        return !students.isEmpty() ? ResponseEntity.ok(students) : ResponseEntity.noContent().build();
+    public ResponseEntity<List<UserResponseDto>> findTeacherByClassId(@PathVariable Long classId) {
+        List<User> teachers = teacherService.findTeachersByClassId(classId);
+        List<UserResponseDto> teachersDto = new ArrayList<>();
+        teachers.forEach(user -> {teachersDto.add(UserResponseDtoFactory.fromUserToUserResponseDto(user));});
+        return !teachersDto.isEmpty() ? ResponseEntity.ok(teachersDto) : ResponseEntity.noContent().build();
     }
 }

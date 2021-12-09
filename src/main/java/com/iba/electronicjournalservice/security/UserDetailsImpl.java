@@ -1,4 +1,4 @@
-package com.iba.electronicjournalservice.security.jwt;
+package com.iba.electronicjournalservice.security;
 
 
 import com.fasterxml.jackson.annotation.JsonIgnore;

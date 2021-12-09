@@ -1,5 +1,7 @@
-package com.iba.electronicjournalservice.security.jwt;
+package com.iba.electronicjournalservice.config;
 
+import com.iba.electronicjournalservice.security.jwt.JwtTokenFilter;
+import com.iba.electronicjournalservice.security.jwt.JwtTokenProvider;
 import lombok.AllArgsConstructor;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.SecurityConfigurer;
@@ -10,7 +12,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 
 
 @AllArgsConstructor
-public class JwtConfigurer extends SecurityConfigurerAdapter<DefaultSecurityFilterChain, HttpSecurity> {
+public class JwtConfig extends SecurityConfigurerAdapter<DefaultSecurityFilterChain, HttpSecurity> {
     private JwtTokenProvider jwtTokenProvider;
 
     @Override

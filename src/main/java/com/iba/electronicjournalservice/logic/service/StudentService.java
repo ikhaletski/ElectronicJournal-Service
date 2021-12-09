@@ -15,9 +15,7 @@ public class StudentService {
     private UserRepository userRepository;
 
 
-    public List<User> findAllStudents() {
-        return userRepository.findUsersByRole(Roles.STUDENT.name());
-    }
+    public List<User> findAllStudents() { return userRepository.findUsersByRole(Roles.STUDENT.name()); }
 
     public Optional<User> findStudentById(Long id) { return userRepository.findUserByIdAndRole(id, Roles.STUDENT.name()); }
 

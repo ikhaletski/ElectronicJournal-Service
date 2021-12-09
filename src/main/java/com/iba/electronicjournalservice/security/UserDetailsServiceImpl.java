@@ -2,8 +2,6 @@ package com.iba.electronicjournalservice.security;
 
 import com.iba.electronicjournalservice.logic.service.UserService;
 import com.iba.electronicjournalservice.model.user.User;
-import com.iba.electronicjournalservice.security.jwt.UserDetailsImpl;
-import com.iba.electronicjournalservice.security.jwt.UserDetailsFactory;
 import lombok.AllArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
