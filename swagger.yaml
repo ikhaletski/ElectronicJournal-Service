@@ -1,0 +1,535 @@
+swagger: "2.0"
+info:
+  version: "1.0.0"
+  title: "Electronic Journal"
+  termsOfService: "http://swagger.io/terms/"
+  contact:
+    email: "khaletskiilay@yandex.ru"
+  license:
+    name: "Apache 2.0"
+    url: "http://www.apache.org/licenses/LICENSE-2.0.html"
+host: "localhost:8080"
+basePath: "/api"
+tags:
+- name: "user"
+- name: "student"
+- name: "teacher"
+- name: "class"
+schemes:
+- "https"
+- "http"
+paths:
+  /user/create:
+    post:
+      tags:
+      - "user"
+      summary: "Register new user in the system"
+      operationId: "createUser"
+      parameters:
+      - in: "body"
+        name: "body"
+        description: "User object to create"
+        required: true
+        schema:
+          $ref: "#/definitions/user" 
+      produces:
+      - "application/json"
+      responses:
+        "200":
+          description: "Ok"
+        "405":
+          description: "Invalid input"
+  /user/{userId}:
+    get:
+      tags:
+      - "user"
+      summary: "Return information about user by id"
+      operationId: "getUser"
+      parameters:
+        - name: "userId"
+          in: "path"
+          description: "ID of person to return"
+          required: true
+          type: "integer"
+      consumes:
+      - "application/json"
+      - "application/xml"
+      produces:
+      - "application/xml"
+      - "application/json"
+      responses:
+        "200":
+          description: "Ok"
+          schema:
+            $ref: "#/definitions/user"
+        "404":
+          description: "Not found"
+  /user/update/{userId}:
+    put:
+      tags:
+      - "user"
+      summary: "Update userdata"
+      operationId: "updeteUser"
+      parameters:
+        - name: "userId"
+          in: "path"
+          description: "ID of person to update"
+          required: true
+          type: "integer"
+        - name: "body"
+          in: "body"
+          description: "User object to update"
+          required: true
+          schema:
+            $ref: "#/definitions/user" 
+      consumes:
+      - "application/json"
+      - "application/xml"
+      produces:
+      - "application/xml"
+      - "application/json"
+      responses:
+        "200":
+          description: "Ok"
+        "404":
+          description: "Not found"
+        "405":
+          description: "Invalid input"
+  /students/{studentId}/subjects:
+    get:
+      tags:
+      - "student"
+      summary: "Get list of subjects by student id"
+      operationId: "getSubjects"
+      parameters:
+        - name: "studentId"
+          in: "path"
+          required: true
+          type: "integer"
+      consumes:
+      - "application/json"
+      - "application/xml"
+      produces:
+      - "application/xml"
+      - "application/json"
+      responses:
+        "200":
+          description: "Ok"
+          schema:
+            $ref: "#/definitions/subject"
+        "404":
+          description: "Not found"
+  /students/{studentId}/subjects/{subjectId}/marks:
+    get:
+      tags:
+      - "student"
+      summary: "Get list of marks by subject id"
+      operationId: "getMarks"
+      parameters:
+        - name: "subjectId"
+          in: "path"
+          required: true
+          type: "integer"
+        - name: "studentId"
+          in: "path"
+          required: true
+          type: "integer"
+      consumes:
+      - "application/json"
+      - "application/xml"
+      produces:
+      - "application/xml"
+      - "application/json"
+      responses:
+        "200":
+          description: "Ok"
+        "404":
+          description: "Not found"
+  /students/{studentId}/statistic:
+    get:
+      tags:
+      - "student"
+      summary: "Get statistics"
+      operationId: "getStatistic"
+      parameters:
+        - name: "studentId"
+          in: "path"
+          required: true
+          type: "integer"
+      consumes:
+      - "application/json"
+      - "application/xml"
+      produces:
+      - "application/xml"
+      - "application/json"
+      responses:
+        "200":
+          description: "Ok"
+        "404":
+          description: "Not found"
+  /students:
+    get:
+      tags:
+      - "student"
+      summary: "Get slist of marks by subject id"
+      operationId: "getStudents"
+      consumes:
+      - "application/json"
+      - "application/xml"
+      produces:
+      - "application/xml"
+      - "application/json"
+      responses:
+        "200":
+          description: "Ok"
+          schema:
+            $ref: "#/definitions/student"
+        "404":
+          description: "Not found"
+  /students/add:
+    post:
+      tags:
+      - "student"
+      summary: "Add new student"
+      operationId: "addStudent"
+      parameters:
+      - in: "body"
+        name: "Student"
+        description: "Student object to create"
+        required: true
+        schema:
+          $ref: "#/definitions/student" 
+      consumes:
+      - "application/json"
+      - "application/xml"
+      produces:
+      - "application/xml"
+      - "application/json"
+      responses:
+        "200":
+          description: "Ok"
+  /students/{studentId}/update/:
+    put:
+      tags:
+      - "student"
+      summary: "Update student"
+      operationId: "updateStudent"
+      parameters:
+      - in: "path"
+        name: "studentId"
+        required: true
+        type: "integer"
+      - in: "body"
+        name: "Student"
+        description: "Student object to create"
+        required: true
+        schema:
+          $ref: "#/definitions/student" 
+      consumes:
+      - "application/json"
+      - "application/xml"
+      produces:
+      - "application/xml"
+      - "application/json"
+      responses:
+        "200":
+          description: "Ok"
+  /students/{studentId}/subject/{subjectId}/mark:
+    post:
+      tags:
+      - "student"
+      summary: "Add mark to student by subject id"
+      operationId: "addMark"
+      parameters:
+        - name: "studentId"
+          in: "path"
+          required: true
+          type: "integer"
+        - name: "subjectId"
+          in: "path"
+          required: true
+          type: "integer"
+      consumes:
+      - "application/json"
+      - "application/xml"
+      produces:
+      - "application/xml"
+      - "application/json"
+      responses:
+        "200":
+          description: "Ok"
+  /teachers:
+    get:
+      tags:
+      - "teacher"
+      summary: "Get list of teachers"
+      operationId: "getTeachers"
+      consumes:
+      - "application/json"
+      - "application/xml"
+      produces:
+      - "application/xml"
+      - "application/json"
+      responses:
+        "200":
+          description: "Ok"
+          schema:
+            $ref: "#/definitions/teacher"
+  /teachers/{teacherId}:
+    get:
+      tags:
+      - "teacher"
+      summary: "Get teacher by id"
+      operationId: "getTeacher"
+      parameters:
+        - in: "path"
+          name: "teacherId"
+          required: true
+          type: "integer"
+      consumes:
+      - "application/json"
+      - "application/xml"
+      produces:
+      - "application/xml"
+      - "application/json"
+      responses:
+        "200":
+          description: "Ok"
+          schema:
+            $ref: "#/definitions/teacher"
+  /teachers/add:
+    post:
+      tags:
+      - "teacher"
+      summary: "Add new teacher"
+      operationId: "addTeacher"
+      parameters:
+      - in: "body"
+        name: "Teacher"
+        description: "Teacher object to create"
+        required: true
+        schema:
+          $ref: "#/definitions/teacher" 
+      consumes:
+      - "application/json"
+      - "application/xml"
+      produces:
+      - "application/xml"
+      - "application/json"
+      responses:
+        "200":
+          description: "Ok"
+  /teachers/{teacherId}/update/:
+    put:
+      tags:
+      - "teacher"
+      summary: "Update teacher"
+      operationId: "updateTeacher"
+      parameters:
+      - in: "path"
+        name: "teacherId"
+        required: true
+        type: "integer"
+      - in: "body"
+        name: "teacher"
+        description: "Teacher object to update"
+        required: true
+        schema:
+          $ref: "#/definitions/teacher" 
+      consumes:
+      - "application/json"
+      - "application/xml"
+      produces:
+      - "application/xml"
+      - "application/json"
+      responses:
+        "200":
+          description: "Ok"
+  /classes:
+    get:
+      tags:
+      - "class"
+      summary: "Get list of classes"
+      operationId: "getClasses"
+      consumes:
+      - "application/json"
+      - "application/xml"
+      produces:
+      - "application/xml"
+      - "application/json"
+      responses:
+        "200":
+          description: "Ok"
+          schema:
+            $ref: "#/definitions/class"
+  /classes/{classId}:
+    get:
+      tags:
+      - "class"
+      summary: "Get class by id"
+      operationId: "getClass"
+      parameters:
+        - in: "path"
+          name: "classId"
+          required: true
+          type: "integer"
+      consumes:
+      - "application/json"
+      - "application/xml"
+      produces:
+      - "application/xml"
+      - "application/json"
+      responses:
+        "200":
+          description: "Ok"
+          schema:
+            $ref: "#/definitions/class"
+  /classes/add:
+    post:
+      tags:
+      - "class"
+      summary: "Add new class"
+      operationId: "addClass"
+      parameters:
+      - in: "body"
+        name: "Class"
+        description: "Class object to create"
+        required: true
+        schema:
+          $ref: "#/definitions/class" 
+      consumes:
+      - "application/json"
+      - "application/xml"
+      produces:
+      - "application/xml"
+      - "application/json"
+      responses:
+        "200":
+          description: "Ok"
+  /classes/{classId}/update/:
+    put:
+      tags:
+      - "class"
+      summary: "Update class"
+      operationId: "updateClass"
+      parameters:
+      - in: "path"
+        name: "classId"
+        required: true
+        type: "integer"
+      - in: "body"
+        name: "Class"
+        description: "Class object to update"
+        required: true
+        schema:
+          $ref: "#/definitions/class" 
+      consumes:
+      - "application/json"
+      - "application/xml"
+      produces:
+      - "application/xml"
+      - "application/json"
+      responses:
+        "200":
+          description: "Ok"
+  
+        
+  
+          
+definitions:
+  user:
+    type: "object"
+    properties:
+      id:
+        type: "integer"
+        format: "int64"
+      first_Name:
+        type: "string"
+      last_Name:
+        type: "string"
+      email:
+        type: "string"
+      password:
+        type: "string"
+      phone:
+        type: "string"
+      role:
+        type: "integer"
+        format: "int32"
+  teacher:
+    type: "object"
+    properties:
+      id:
+        type: "integer"
+        format: "int64"
+      user_id:
+        type: "integer"
+        format: "int64"
+        $ref: "#/definitions/user"
+  student:
+    type: "object"
+    properties:
+      id:
+        type: "integer"
+        format: "int64"
+      account:
+        type: "object"
+        $ref: "#/definitions/user"
+      class_id:
+        type: "integer"
+        format: "int64"
+        $ref: "#/definitions/class"
+  class: 
+    type: "object"
+    properties:
+      id:
+        type: "integer"
+        format: "int64"
+      name:
+        type: "string"
+      teacher_id: 
+        type: "integer"
+        format: "int64"
+        $ref: "#/definitions/teacher"
+  subject:
+    type: "object"
+    properties:
+      id:
+        type: "integer"
+        format: "int64"
+      name: 
+        type: "string"
+      teacher_id: 
+        type: "integer"
+        format: "int64"
+        $ref: "#/definitions/teacher"
+      class_id: 
+        type: "integer"
+        format: "int64"
+        $ref: "#/definitions/class"
+  marks:
+    type: "object"
+    properties:
+      id:
+        type: "integer"
+        format: "int64"
+      student_id:
+        type: "integer"
+        format: "int64"
+        $ref: "#/definitions/student"
+      subject_id: 
+        type: "integer"
+        format: "int64"
+        $ref: "#/definitions/subject"
+      mark: 
+        type: "integer"
+        format: "int64"
+      date:
+        type: "string"
+        
+        
+      
+    
+      
+      
+        
