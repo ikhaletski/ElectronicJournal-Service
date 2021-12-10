@@ -1,4 +1,4 @@
-package com.iba.electronicjournalservice.security.jwt;
+package com.iba.electronicjournalservice.exception.jwt;
 
 import net.bytebuddy.implementation.bytecode.Throw;
 

@@ -20,7 +20,7 @@ public class MarkController {
     @GetMapping(value = "/{id}")
     public ResponseEntity<Mark> findMarkById(@PathVariable Long id) {
         Optional<Mark> mark = markService.findMarkById(id);
-        return mark.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.noContent().build());
+        return mark.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
 
     @GetMapping(value = "/student/{studentId}")
@@ -30,14 +30,13 @@ public class MarkController {
     }
 
     @GetMapping(value = "/student/{studentId}/subject/{subjectId}")
-    public ResponseEntity<List<Mark>> findMarksByStudentIdAndSubjectId(@PathVariable Long studentId, @PathVariable Long subjectId) {
-        List<Mark> marks = markService.findMarksByStudentIdAndSubjectId(studentId, subjectId);
-        return marks.isEmpty() ? ResponseEntity.notFound().build() : ResponseEntity.ok(marks);
+    public List<Mark> findMarksByStudentIdAndSubjectId(@PathVariable Long studentId, @PathVariable Long subjectId) {
+        return markService.findMarksByStudentIdAndSubjectId(studentId, subjectId);
     }
 
 
     @PostMapping(value = "")
-    public ResponseEntity<User> addMark(@RequestBody Optional<Mark> mark) {
+    public ResponseEntity<Object> addMark(@RequestBody Optional<Mark> mark) {
         if (mark.isPresent()) {
             markService.addMark(mark.get());
             return ResponseEntity.ok().build();
@@ -46,7 +45,7 @@ public class MarkController {
     }
 
     @DeleteMapping(value = "/{id}")
-    public ResponseEntity<Mark> deleteMark(@PathVariable Long id) {
+    public ResponseEntity<Object> deleteMark(@PathVariable Long id) {
         if(!markService.isExist(id)) return ResponseEntity.notFound().build();
         markService.deleteMark(id);
         return ResponseEntity.ok().build();

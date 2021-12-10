@@ -26,7 +26,6 @@ public class UserController {
     public ResponseEntity<UserResponseDto> findUserById(@PathVariable Long id) {
         Optional<User> user = userService.findUserById(id);
         UserResponseDto userResponseDto = UserResponseDtoFactory.fromUserToUserResponseDto(user.get());
-        //userResponseDto.setClassName(groupService.findById(user.get().getClassId()).get().getGroupName());
         return ResponseEntity.ok(userResponseDto);
     }
 
